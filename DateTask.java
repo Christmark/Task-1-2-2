@@ -1,69 +1,90 @@
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
-public class DateTask{
-    private int day;
-    private int month;
-    private int year;
+package tasksheet;
 
-    public DateTask(){
-        this(1,1,1);
-    }
-
-    public DateTask(int year, int month, int day) {
-        this.day = day;
-        this.month = month;
-        this.year = year;
-        }
-
-    public String toString(){
-        LocalDate date = LocalDate.of(year, month, day);
-        DateTimeFormatter shortF = DateTimeFormatter.ofPattern("MMMM/d/yyyy");
-        return (shortF.format(date)); 
-        }
-    public int getDay(){
-        return this.day;
-    }
-    public int setDay(int day){
-        this.day = 0;
-        if(day>0)
-            this.day = day;
-        return this.day;
-    }
-
-    public int getMonth(){
-        return this.month;
-    }
-    public int setMonth(int month){
-        this.month = 0;
-        if(month>0)
-            this.month = month;
-        return this.month;
-    }
-    public int getYear(){
-        return this.year;
-    }
-    public int setYear(int year){
-        this.year = 0;
-        if(year>0)
-            this.year = year;
-        return this.year;
-    }
-
-
-    public static boolean isLeapYear(int year) {
-        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-    }
-
-    public static void displayLeapYears(int startYear, int endYear) {
-        System.out.println("Leap years between " + startYear + " and " + endYear + ":");
-        for (int year = startYear; year <= endYear; year++) {
-            if (isLeapYear(year)) {
-                System.out.print(year + " ");
-            }
-        }
-        System.out.println();
-    }
-
-}
+public class DateTask {
+    // instance variables
+  byte day;
+  byte month;
+  short year;
+ // Constructors:
+ 
+ // The no-args constructor
+ public DateTask() {
+    this(1, 1, 1);
+ }
+ // Constructor that takes 3 arguments
+ public DateTask(int m, int d, int y) {
+     setDate(m, d, y);
+ }
+ // Methods
+ public String toString() {
+     return month + "-" + day + "-" + year;
+ }
+ public void setDate(int m, int d, int y) {
+     if (valid(d, m, y)) {
+         day = (byte) d;
+         year = (short) y;
+         month = (byte) m;
+     }
+     else{
+         day = (byte) 0;
+         year = (short) 0;
+         month = (byte) 0;
+     }
+ }
+ public static void leapYears() {
+     for (int i = 1980; i <= 2023; i = i + 4) {
+         if (((i % 4 == 0) && (i % 100 != 0)) || (i % 400 == 0))
+             System.out.println("The year " + i + " is a leap year");
+     }
+ }
+ public int getDay() {
+     return day;
+ }
+ public void setDay(int day) {
+     if (valid(day, month, year)) {
+         this.day = (byte) day;
+     }else{
+        this.day = (byte) 0;
+     }
+     
+ }
+ public int getMonth() {
+     return month;
+ }
+ public void setMonth(int month) {
+     if (valid(day, month, year)) {
+         this.month = (byte) month;
+     }
+     else{
+         this.month = (byte) 0;
+     }
+ }
+ public int getYear() {
+     return year;
+ }
+ public void setYear(int year) {
+     if (valid(day, month, year)) {
+         this.year = (short) year;
+     }
+     else{
+         this.year = (short) 0;
+     }
+ }
+ private boolean valid(int day, int month, int year) {
+     if (day > 31 || day < 1 || month > 12 || month < 1 || year < 1)  {
+         System.out.println("Attempting to create a non-valid date " +month + "/" + day + "/" + year);
+         return false;
+     }
+     switch (month) {
+         case 4:
+         case 6:
+         case 9:
+         case 11:
+             return (day <= 30);
+         case 2:
+             return day <= 28 || (day == 29 && year % 4 == 0);
+     }
+     return true;
+ }
+ }
